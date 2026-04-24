@@ -1,0 +1,14 @@
+num_hidden: 512
+
+# train args:
+batch_size: 1
+max_epoch: 50
+lr: 1e-3
+weight_decay: 0.05
+global_seed: 1234
+data_seed: 1234
+gradient_clip: 32.0
+
+# log args:
+log_frequency: 10
+

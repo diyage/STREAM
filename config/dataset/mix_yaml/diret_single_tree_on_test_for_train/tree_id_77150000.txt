@@ -1,0 +1,2 @@
+/mnt/inaisfs/data/home/yangyh_criait/project/stream/config/dataset/test_for_train/tree_id_77150000.yaml
+/mnt/inaisfs/data/home/yangyh_criait/project/stream/config/dataset/test_for_train/tree_id_77150000_expand.yaml

@@ -1,0 +1,18 @@
+gauge_num: 2
+root_offset_ind: 0
+max_direct_upstream_distance: null
+sub_basin_data_dir: /mnt/inaisfs/data/home/yangyh_criait/share/yangyh/data/stream/global/new_train_tree_ID_6139060/ERA5_LAND_Extract/sub_basin/data_processed/24hourly
+future_sub_basin_data_dir: /mnt/inaisfs/data/home/yangyh_criait/share/yangyh/data/stream/global/new_train_tree_ID_6139060/HRES_Predict/sub_basin/data_processed/24hourly
+all_basin_data_dir: /mnt/inaisfs/data/home/yangyh_criait/share/yangyh/data/stream/global/new_train_tree_ID_6139060/ERA5_LAND_Extract/all_basin/data_processed/24hourly
+future_all_basin_data_dir: /mnt/inaisfs/data/home/yangyh_criait/share/yangyh/data/stream/global/new_train_tree_ID_6139060/HRES_Predict/all_basin/data_processed/24hourly
+train_years: [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021,
+  2022, 2023, 2024]
+val_years: [1981, 1982, 1983, 1984]
+evaluation_max_time_steps: 1276
+test_years: [1981, 1982, 1983, 1984]
+test_evaluation_max_time_steps: 1276
+history_time_step_num: 180
+future_time_step_num: 1
+data_mean_frequency: 1
+normalize: true
+num_workers: 0
