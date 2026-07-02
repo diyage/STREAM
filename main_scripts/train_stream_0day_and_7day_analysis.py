@@ -201,6 +201,13 @@ class EdgeResidualPredict(torch.nn.Module):
             SelfLstm(mid_dim, just_used_last_time_stamp=False),
             nn.Linear(mid_dim, 1),
         )
+        self.agg_attn = nn.Sequential(
+            nn.Linear(mid_dim, mid_dim),
+            nn.SiLU(),
+            nn.LayerNorm(mid_dim),
+            SelfLstm(mid_dim, just_used_last_time_stamp=False),
+            nn.Linear(mid_dim, 1),
+        )
         if use_norm:
             self.out_norm = nn.LayerNorm(mid_dim)
         else:
@@ -230,12 +237,16 @@ class EdgeResidualPredict(torch.nn.Module):
         features_embed = features_embed.view(b*n, t, -1)  # [b*n, t, mid]
 
         attn_weights = self.linear_attn(features_embed)  # [b*n, t, 1]
+        
+        agg_weights = self.agg_attn(features_embed) # [b*n, t, 1]
 
         attn_weights_softmax = torch.nn.functional.softmax(attn_weights, dim=1)
+        agg_weights_sigmoid = torch.nn.functional.sigmoid(torch.mean(agg_weights, dim=1))
 
         out = torch.sum(features_embed * attn_weights_softmax, dim=1)  # [b*n, mid]
-        out = out.view(b, n, -1)
-        return self.out_norm(out)
+        out = out.view(b, n, -1) 
+        agg_weights_sigmoid = agg_weights_sigmoid.view(b, n, 1)
+        return self.out_norm(out) * agg_weights_sigmoid
 
 
 class BasinPredict(torch.nn.Module):
@@ -790,7 +801,8 @@ def main():
     import datetime
     hostname = socket.gethostname()
     deepspeed.init_distributed(dist_backend='nccl', timeout=datetime.timedelta(seconds=1800))
-    os.environ["TRITON_CACHE_DIR"] = f"/mnt/inaisfs/data/home/yangyh_criait/.triton/cache_{hostname}_{dist.get_rank():0>5}"
+    
+    os.environ["TRITON_CACHE_DIR"] = f"{os.path.expanduser('~')}/.triton/cache_{hostname}_{dist.get_rank():0>5}"
     local_rank = os.environ["LOCAL_RANK"]
     device = torch.device(f"cuda:{local_rank}")
 

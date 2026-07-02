@@ -768,7 +768,7 @@ def main():
     import datetime
     hostname = socket.gethostname()
     deepspeed.init_distributed(dist_backend='nccl', timeout=datetime.timedelta(seconds=1800))
-    os.environ["TRITON_CACHE_DIR"] = f"/mnt/inaisfs/data/home/yangyh_criait/.triton/cache_{hostname}_{dist.get_rank():0>5}"
+    os.environ["TRITON_CACHE_DIR"] = f"{os.path.expanduser('~')}/.triton/cache_{hostname}_{dist.get_rank():0>5}"
     local_rank = os.environ["LOCAL_RANK"]
     device = torch.device(f"cuda:{local_rank}")
 
